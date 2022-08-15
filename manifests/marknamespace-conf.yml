@@ -1,0 +1,33 @@
+server:
+  port: 8443
+  TLS:
+    certFile: /data/certs/tls.crt
+    keyFile: /data/certs/tls.key
+
+labels:
+  - caseNamespace: "^([^-]+)-([^-]+)-([^-]+)-([^-]+)$"
+    inject:
+    - name: region
+      value: "reg-{{index . 0}}"
+    - name: area
+      value: "{{index . 1}}"
+    - name: team
+      value: "{{index . 2}}"
+    - name: environment
+      value: "{{index . 3}}"
+  - caseNamespace: "^([^-]+)-([^-]+)-([^-]+)$"
+    inject:
+    - name: region
+      value: "reg-{{index . 0}}"
+    - name: area
+      value: "{{index . 1}}"
+    - name: team
+      value: "{{index . 2}}"
+    - name: environment
+      value: "prod"
+
+annotations:
+  - caseNamespace: ".*test.*"
+    inject:
+     - name: "purpose"
+       value: "internal-test"

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: marknamespace-webhook
+  namespace: marknamespace-webhook
+data:
+  marknamespace-conf.yml: |

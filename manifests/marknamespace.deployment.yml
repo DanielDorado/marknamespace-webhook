@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: marknamespace-webhook
+  name: marknamespace-webhook
+  namespace: marknamespace-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: marknamespace-webhook
+  template:
+    metadata:
+      labels:
+        app: marknamespace-webhook
+    spec:
+      volumes:
+        - name: webhook-tls-certs
+          secret:
+            secretName: marknamespace-webhook-tls
+        - name: webhook-conf
+          configMap:
+            name: marknamespace-webhook
+      containers:
+        - image: default-route-openshift-image-registry.apps-crc.testing/openshift/marknamespace
+          name: server
+          imagePullPolicy: Always
+          ports:
+            - name: tls-alt
+              containerPort: 8443
+          volumeMounts:
+            - mountPath: /data/certs
+              name: webhook-tls-certs
+              readOnly: true
+            - mountPath: /data/conf
+              name: webhook-conf
+              readOnly: true
